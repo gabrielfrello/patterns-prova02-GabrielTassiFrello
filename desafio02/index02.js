@@ -1,1 +1,2 @@
-console.log("Hello, World! 002");
+console.log("=== Bridge ===");
+await import("./problemBridge.js");

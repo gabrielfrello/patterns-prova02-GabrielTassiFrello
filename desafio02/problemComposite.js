@@ -1,34 +1,47 @@
-class Task {
-  constructor(name) {
-    this.name = name;
-  }
-
+class FileSystemItem {
   showDetails() {
-    console.log(`Tarefa: ${this.name}`);
+    throw new Error("Método abstrato");
   }
 }
 
-class Project {
+class File extends FileSystemItem {
   constructor(name) {
+    super();
     this.name = name;
-    this.tasks = [];
   }
 
-  add(task) {
-    this.tasks.push(task);
-  }
-
-  showDetails() {
-    console.log(`Projeto: ${this.name}`);
-    this.tasks.forEach((task) => console.log(`  - ${task.name}`));
+  showDetails(indent = "") {
+    console.log(`${indent}* ${this.name}`);
   }
 }
 
-// Cliente
-const t1 = new Task("Escrever documentação");
-const t2 = new Task("Fazer testes");
-const p = new Project("Lançamento v1.0");
-p.add(t1);
-p.add(t2);
+class Folder extends FileSystemItem {
+  constructor(name) {
+    super();
+    this.name = name;
+    this.items = [];
+  }
 
-p.showDetails();
+  add(item) {
+    this.items.push(item);
+  }
+
+  showDetails(indent = "") {
+    console.log(`${indent}* ${this.name}`);
+    this.items.forEach((item) => item.showDetails(indent + "  "));
+  }
+}
+
+const file1 = new File("foto.png");
+const file2 = new File("musica.mp3");
+const file3 = new File("documento.txt");
+
+const sub = new Folder("Downloads");
+sub.add(file3);
+
+const root = new Folder("Meus Arquivos");
+root.add(file1);
+root.add(file2);
+root.add(sub);
+
+root.showDetails();

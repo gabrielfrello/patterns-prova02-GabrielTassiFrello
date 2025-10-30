@@ -1,1 +1,2 @@
-console.log("Hello, World! 001");
+console.log("=== Adapter ===");
+await import("./problemAdapter.js");

@@ -1,13 +1,32 @@
-class Message {
-  constructor(text) {
-    this.text = text;
-  }
-
-  getText() {
-    return this.text;
+class Notifier {
+  send(message) {
+    console.log("Notificação padrão:", message);
   }
 }
 
-// Cliente
-const msg = new Message("hoje o dia está horrível");
-console.log(msg.getText());
+class NotifierDecorator {
+  constructor(notifier) {
+    this.notifier = notifier;
+  }
+
+  send(message) {
+    this.notifier.send(message);
+  }
+}
+
+class EmailNotifier extends NotifierDecorator {
+  send(message) {
+    super.send(message);
+    console.log("Enviando e-mail:", message);
+  }
+}
+
+class SMSNotifier extends NotifierDecorator {
+  send(message) {
+    super.send(message);
+    console.log("Enviando SMS:", message);
+  }
+}
+
+const notifier = new SMSNotifier(new EmailNotifier(new Notifier()));
+notifier.send("Sistema atualizado com sucesso!");

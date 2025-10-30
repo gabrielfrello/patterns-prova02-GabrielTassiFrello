@@ -1,26 +1,33 @@
-class LegacyPaymentSystem {
-  makePayment(amount) {
-    console.log(`Pagando R$${amount} com sistema legado.`);
-  }
-}
-
-class ModernPaymentAPI {
-  process(amountInCents) {
-    console.log(`Pagamento de R$${amountInCents / 100} via API moderna.`);
-  }
-}
-
 class PaymentProcessor {
-  constructor(system) {
-    this.system = system;
-  }
-
-  pay(amount) {
-    this.system.makePayment(amount);
+  processPayment(amount) {
+    console.log(`Pagamento de R$${amount} processado.`);
   }
 }
 
-// Cliente
-const legacy = new LegacyPaymentSystem();
-const processor = new PaymentProcessor(legacy);
-processor.pay(100);
+class ExternalPaymentService {
+  makeTransaction(value) {
+    console.log(`Transação realizada no valor de R$${value} com serviço externo.`);
+  }
+}
+
+class ExternalPaymentAdapter extends PaymentProcessor {
+  constructor(externalService) {
+    super();
+    this.externalService = externalService;
+  }
+
+  processPayment(amount) {
+    this.externalService.makeTransaction(amount);
+  }
+}
+
+function payOrder(processor, amount) {
+  processor.processPayment(amount);
+}
+
+const internalProcessor = new PaymentProcessor();
+payOrder(internalProcessor, 100);
+
+const externalService = new ExternalPaymentService();
+const adapted = new ExternalPaymentAdapter(externalService);
+payOrder(adapted, 200);
